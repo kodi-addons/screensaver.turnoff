@@ -245,6 +245,7 @@ class TurnOffDialog(WindowXMLDialog, object):
         self.monitor = None
         self.mute = None
         self.power = None
+        self.hasResumed = 0
         atexit.register(self.exit)
 
     def onInit(self):  # pylint: disable=invalid-name
@@ -301,11 +302,14 @@ class TurnOffDialog(WindowXMLDialog, object):
         func(self.display.get('function'), *self.display.get('args_on'))
 
         # Clean up everything
+        self.hasResumed = 1
         self.exit()
 
     def exit(self):
         ''' Clean up function '''
         self.monitor = None
+        if self.hasResumed != 1:
+          self.resume()
         self.close()
 
 
